@@ -4,7 +4,11 @@ import { Send, Palette, MessageSquare } from "lucide-react";
 
 const PREVIEW_MESSAGES = [
   { id: 1, content: "Hey! How's it going?", isSent: false },
-  { id: 2, content: "I'm doing great! Just working on some new features.", isSent: true },
+  {
+    id: 2,
+    content: "I'm doing great! Just working on some new features.",
+    isSent: true,
+  },
 ];
 
 const SettingsPage = () => {
@@ -24,7 +28,9 @@ const SettingsPage = () => {
                   </div>
                   <div>
                     <h1 className="text-xl font-bold">Theme</h1>
-                    <p className="text-sm text-base-content/70">Choose your style</p>
+                    <p className="text-sm text-base-content/70">
+                      Choose your style
+                    </p>
                   </div>
                 </div>
               </div>
@@ -37,12 +43,16 @@ const SettingsPage = () => {
                       className={`
                         relative group flex flex-col items-center gap-3 p-4 rounded-xl transition-all
                         hover:scale-102 hover:shadow-lg
-                        ${theme === t ? "bg-base-100 shadow-md ring-2 ring-primary" : "hover:bg-base-200"}
+                        ${
+                          theme === t
+                            ? "bg-base-100 shadow-md ring-2 ring-primary"
+                            : "hover:bg-base-200"
+                        }
                       `}
                       onClick={() => setTheme(t)}
                     >
-                      <div 
-                        className="relative w-full aspect-video rounded-lg overflow-hidden shadow-inner" 
+                      <div
+                        className="relative w-full aspect-video rounded-lg overflow-hidden shadow-inner"
                         data-theme={t}
                       >
                         <div className="absolute inset-0 grid grid-cols-2 gap-2 p-2">
@@ -79,7 +89,9 @@ const SettingsPage = () => {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold">Preview</h2>
-                    <p className="text-sm text-base-content/70">Live chat interface preview</p>
+                    <p className="text-sm text-base-content/70">
+                      Live chat interface preview
+                    </p>
                   </div>
                 </div>
               </div>
@@ -90,10 +102,12 @@ const SettingsPage = () => {
                   <div className="px-6 py-4 border-b border-base-200 bg-base-100">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center ring-2 ring-base-200">
-                        <span className="text-primary font-medium text-lg">J</span>
+                        <span className="text-primary font-medium text-lg">
+                          J
+                        </span>
                       </div>
                       <div>
-                        <h3 className="font-medium text-lg">John Doe</h3>
+                        <h3 className="font-medium text-lg">Batman</h3>
                         <div className="flex items-center gap-2 text-base-content/70">
                           <span className="size-2 rounded-full bg-emerald-500" />
                           <span className="text-sm">Online</span>
@@ -107,19 +121,29 @@ const SettingsPage = () => {
                     {PREVIEW_MESSAGES.map((message) => (
                       <div
                         key={message.id}
-                        className={`flex ${message.isSent ? "justify-end" : "justify-start"}`}
+                        className={`flex ${
+                          message.isSent ? "justify-end" : "justify-start"
+                        }`}
                       >
                         <div
                           className={`
                             max-w-[80%] rounded-2xl px-5 py-3 shadow-md
-                            ${message.isSent ? "bg-primary text-primary-content" : "bg-base-200"}
+                            ${
+                              message.isSent
+                                ? "bg-primary text-primary-content"
+                                : "bg-base-200"
+                            }
                           `}
                         >
                           <p className="text-sm">{message.content}</p>
                           <p
                             className={`
                               text-[10px] mt-1.5
-                              ${message.isSent ? "text-primary-content/70" : "text-base-content/70"}
+                              ${
+                                message.isSent
+                                  ? "text-primary-content/70"
+                                  : "text-base-content/70"
+                              }
                             `}
                           >
                             12:00 PM
