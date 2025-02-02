@@ -3,7 +3,10 @@
 A full-stack chat application built with the MERN stack (MongoDB, Express.js, React, Node.js) featuring real-time messaging capabilities using Socket.IO.
 
 
-<img width="1440" alt="1" src="https://github.com/user-attachments/assets/0a8a960d-aafb-4f0d-8f0a-0668ed82efc8" />
+
+
+<img width="1440" alt="15" src="https://github.com/user-attachments/assets/75e15400-b30a-4cb4-a159-f7c49ca13eff" />
+
 
 
 ## Features
@@ -18,8 +21,8 @@ A full-stack chat application built with the MERN stack (MongoDB, Express.js, Re
 - Environment variable configuration
 - Production-ready setup
 
-  <img width="1436" alt="2" src="https://github.com/user-attachments/assets/a694be0a-a3b1-41ce-9fd8-f7a69d6fa5ca" />
-  <img width="1440" alt="3" src="https://github.com/user-attachments/assets/43e735f2-46d1-4652-bdbe-fb2a9090d924" />
+<img width="1440" alt="15 1" src="https://github.com/user-attachments/assets/7208266c-aa7b-4cbb-8317-ecc49dd7ec77" />
+<img width="1440" alt="15 3" src="https://github.com/user-attachments/assets/933da715-9bcf-444b-9907-bf21b7112edb" />
 
 
 ## Tech Stack
