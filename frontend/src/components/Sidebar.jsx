@@ -2,103 +2,99 @@ import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
-import { Search, Users } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
   const { onlineUsers } = useAuthStore();
-  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
 
   useEffect(() => {
     getUsers();
   }, [getUsers]);
 
-  const filteredUsers = users
-    .filter((user) => showOnlineOnly ? onlineUsers.includes(user._id) : true)
-    .filter((user) => 
-      user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const filteredUsers = users.filter((user) => 
+    user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+  ).sort((a, b) => a.fullName.localeCompare(b.fullName));
+
+  const handleProfileClick = (e, user) => {
+    e.stopPropagation();
+    setSelectedProfile(user);
+    setShowProfileModal(true);
+  };
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
-    <aside className="h-full w-24 lg:w-80 border-r border-base-300 flex flex-col bg-base-200/50">
-      <div className="p-3 lg:p-4 border-b border-base-300">
-        <div className="flex items-center justify-between mb-3 lg:mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Users className="size-4 lg:size-5 text-primary" />
-            </div>
-            <h2 className="font-semibold text-sm lg:text-base hidden lg:block">Contacts</h2>
-          </div>
-          <div className="flex items-center">
-            <label className="cursor-pointer flex items-center gap-1.5 lg:gap-2">
-              <input
-                type="checkbox"
-                checked={showOnlineOnly}
-                onChange={(e) => setShowOnlineOnly(e.target.checked)}
-                className="checkbox checkbox-xs lg:checkbox-sm checkbox-primary"
-              />
-              <span className="text-xs lg:text-sm hidden lg:inline">Online only</span>
-            </label>
+    <>
+      <aside className="h-full w-24 lg:w-80 flex flex-col bg-base-200/80 backdrop-blur-xl shadow-lg">
+        <div className="p-4 lg:p-5 border-b border-base-300/50 bg-gradient-to-r from-base-200/90 to-base-300/50">
+          <h2 className="font-bold text-base lg:text-lg mb-4 lg:mb-5 bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">Contacts</h2>
+
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search contacts..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="input input-sm w-full bg-base-300/50 placeholder:text-base-content/30 text-base-content/90 border-none focus:outline-none focus:ring-2 focus:ring-accent/20"
+            />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-base-content/30" />
           </div>
         </div>
 
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="input input-xs lg:input-sm input-bordered w-full pl-7 lg:pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <Search className="absolute left-2 lg:left-3 top-1/2 -translate-y-1/2 size-3 lg:size-4 text-base-content/40" />
-        </div>
-      </div>
-
-      <div className="overflow-y-auto flex-1 py-2">
-        {filteredUsers.map((user) => (
-          <button
-            key={user._id}
-            onClick={() => setSelectedUser(user)}
-            className={`
-              w-full p-2 lg:p-3 flex items-center gap-2 lg:gap-3 relative
-              hover:bg-base-300/50 transition-all duration-200
-              ${selectedUser?._id === user._id ? "bg-base-300/50 before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-primary" : ""}
-            `}
-          >
-            <div className="relative mx-auto lg:mx-0">
-              <img
-                src={user.profilePic || "/avatar.png"}
-                alt={user.fullName}
-                className="size-10 lg:size-12 object-cover rounded-full ring-2 ring-base-300"
-              />
-              {onlineUsers.includes(user._id) && (
-                <span
-                  className="absolute bottom-0.5 right-0.5 size-2 lg:size-3 bg-emerald-500
-                  rounded-full ring-2 ring-base-200"
-                />
-              )}
-            </div>
-
-            <div className="hidden lg:block text-left flex-1 min-w-0">
-              <div className="font-medium truncate">{user.fullName}</div>
-              <div className="text-sm text-base-content/60 flex items-center gap-1.5">
-                <span className={`size-1.5 rounded-full ${onlineUsers.includes(user._id) ? "bg-emerald-500" : "bg-base-content/20"}`} />
-                {onlineUsers.includes(user._id) ? "Active now" : "Offline"}
+        <div className="flex-1 overflow-y-auto p-3 lg:p-4 space-y-2">
+          {filteredUsers.map((user) => (
+            <button
+              key={user._id}
+              onClick={() => setSelectedUser(user)}
+              className={`w-full flex items-center gap-3 p-2 rounded-xl transition-all ${selectedUser?._id === user._id ? "bg-accent/10 text-accent" : "hover:bg-base-300/50 text-base-content/70 hover:text-base-content"}`}
+            >
+              <div className="avatar group" onClick={(e) => handleProfileClick(e, user)}>
+                <div className={`size-8 lg:size-10 rounded-full ring-2 cursor-pointer transition-all transform hover:scale-105 ${onlineUsers.includes(user._id) ? "ring-success hover:ring-success/70" : "ring-base-300 hover:ring-accent"}`}>
+                  <img
+                    src={user.profilePic || "/avatar.png"}
+                    alt="user avatar"
+                    className="object-cover"
+                  />
+                </div>
               </div>
-            </div>
-          </button>
-        ))}
+              <div className="hidden lg:block text-left group-hover:translate-x-1 transition-transform">
+                <h3 className="font-medium text-sm text-base-content/90 group-hover:text-base-content transition-colors">{user.fullName}</h3>
+                {onlineUsers.includes(user._id) && (
+                  <p className="text-xs text-success group-hover:text-success/90 transition-colors">Online</p>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      </aside>
 
-        {filteredUsers.length === 0 && (
-          <div className="text-center text-base-content/60 py-4">
-            {searchQuery ? "No contacts found" : "No contacts available"}
+      {/* Profile Picture Modal */}
+      {showProfileModal && selectedProfile && (
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center"
+          onClick={() => setShowProfileModal(false)}
+        >
+          <div className="relative max-w-2xl w-full mx-4">
+            <button
+              onClick={() => setShowProfileModal(false)}
+              className="absolute -top-12 right-0 text-white/80 hover:text-white"
+            >
+              <X className="size-6" />
+            </button>
+            <img
+              src={selectedProfile.profilePic || "/avatar.png"}
+              alt={selectedProfile.fullName}
+              className="w-full h-auto rounded-2xl shadow-2xl"
+            />
           </div>
-        )}
-      </div>
-    </aside>
+        </div>
+      )}
+    </>
   );
 };
+
 export default Sidebar;

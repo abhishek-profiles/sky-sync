@@ -28,8 +28,28 @@ const App = () => {
 
   if (isCheckingAuth && !authUser)
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="size-10 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-base-100">
+        <div className="max-w-md w-full p-8 rounded-3xl bg-base-100/50 backdrop-blur-xl border border-base-200/50 shadow-2xl text-center space-y-6">
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-2xl blur opacity-30 animate-pulse duration-1000"></div>
+            <div className="relative size-20 mx-auto transform hover:scale-105 transition-transform">
+              <Loader className="w-full h-full animate-spin text-accent" />
+            </div>
+          </div>
+          <div className="space-y-3">
+            <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Starting SkySync</h2>
+            <p className="text-base-content/70 font-medium">
+            Please wait a moment while the servers wake up
+              <br />
+              <span className="text-sm text-base-content/50">
+                (This may take up to a minute on the first load)
+              </span>
+            </p>
+          </div>
+          <div className="w-full max-w-[200px] mx-auto h-1.5 rounded-full bg-base-300/50 overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-primary to-accent rounded-full animate-progress"></div>
+          </div>
+        </div>
       </div>
     );
 
