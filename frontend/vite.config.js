@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const isProd = import.meta.env.MODE === 'production'
+const backendUrl = import.meta.env.VITE_BACKEND_URL || (isProd ? '' : 'http://localhost:5001')
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -8,8 +11,15 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5001',
+        target: backendUrl,
         changeOrigin: true,
+        secure: isProd,
+        cookieDomainRewrite: {
+          '*': ''
+        },
+        cookiePathRewrite: {
+          '*': '/'
+        }
       }
     }
   },
