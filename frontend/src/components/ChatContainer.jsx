@@ -1,5 +1,6 @@
 import { useChatStore } from "../store/useChatStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { X } from "lucide-react";
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -8,6 +9,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const {
     messages,
     getMessages,
@@ -29,7 +31,7 @@ const ChatContainer = () => {
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messageEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [messages]);
 
@@ -44,15 +46,15 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden relative h-full bg-gradient-to-b from-base-100 to-base-200/30">
-      <ChatHeader />
+    <>
+      <div className="flex-1 flex flex-col overflow-hidden relative h-full bg-gradient-to-b from-base-100 to-base-200/30">
+        <ChatHeader />
     
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => (
           <div
             key={message._id}
             className={`flex ${message.senderId === authUser._id ? "justify-end" : "justify-start"}`}
-            ref={messageEndRef}
           >
             <div className="flex items-end gap-3 max-w-[85%]">
               {message.senderId !== authUser._id && (
@@ -91,12 +93,36 @@ const ChatContainer = () => {
             </div>
           </div>
         ))}
+        <div ref={messageEndRef} />
       </div>
     
       <div className="sticky bottom-0 bg-base-100 border-t border-base-300">
         <MessageInput />
       </div>
-    </div>
+      </div>
+
+      {/* Profile Picture Modal */}
+      {showProfileModal && (
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowProfileModal(false)}
+        >
+          <div className="relative max-w-2xl w-full mx-4">
+            <button
+              onClick={() => setShowProfileModal(false)}
+              className="absolute -top-12 right-0 text-white/80 hover:text-white"
+            >
+              <X className="size-6" />
+            </button>
+            <img
+              src={selectedUser.profilePic || "/avatar.png"}
+              alt={selectedUser.fullName}
+              className="w-full h-auto rounded-2xl shadow-2xl"
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 export default ChatContainer;

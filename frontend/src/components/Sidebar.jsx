@@ -20,17 +20,20 @@ const Sidebar = () => {
   ).sort((a, b) => a.fullName.localeCompare(b.fullName));
 
   const handleProfileClick = (e, user) => {
-    e.stopPropagation();
-    setSelectedProfile(user);
-    setShowProfileModal(true);
+    // Only show profile modal on larger screens (lg and above)
+    if (window.innerWidth >= 1024) {
+      e.stopPropagation();
+      setSelectedProfile(user);
+      setShowProfileModal(true);
+    }
   };
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
     <>
-      <aside className="h-full w-24 lg:w-80 flex flex-col bg-base-200/80 backdrop-blur-xl shadow-lg">
-        <div className="p-4 lg:p-5 border-b border-base-300/50 bg-gradient-to-r from-base-200/90 to-base-300/50">
+      <aside className="h-full w-20 md:w-24 lg:w-80 flex flex-col bg-base-200/80 backdrop-blur-xl shadow-lg transition-all duration-300 ease-in-out">
+        <div className="p-3 md:p-4 lg:p-5 border-b border-base-300/50 bg-gradient-to-r from-base-200/90 to-base-300/50">
           <h2 className="font-bold text-base lg:text-lg mb-4 lg:mb-5 bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">Contacts</h2>
 
           <div className="relative">
@@ -45,7 +48,7 @@ const Sidebar = () => {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 lg:p-4 space-y-2">
+        <div className="flex-1 overflow-y-auto p-2 md:p-3 lg:p-4 space-y-2 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
           {filteredUsers.map((user) => (
             <button
               key={user._id}
@@ -75,20 +78,20 @@ const Sidebar = () => {
       {/* Profile Picture Modal */}
       {showProfileModal && selectedProfile && (
         <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6 lg:p-8 touch-none"
           onClick={() => setShowProfileModal(false)}
         >
-          <div className="relative max-w-2xl w-full mx-4">
+          <div className="relative w-full max-w-lg mx-auto">
             <button
               onClick={() => setShowProfileModal(false)}
-              className="absolute -top-12 right-0 text-white/80 hover:text-white"
+              className="absolute -top-12 right-0 text-white/80 hover:text-white p-2 touch-manipulation"
             >
               <X className="size-6" />
             </button>
             <img
               src={selectedProfile.profilePic || "/avatar.png"}
               alt={selectedProfile.fullName}
-              className="w-full h-auto rounded-2xl shadow-2xl"
+              className="w-full h-auto rounded-2xl shadow-2xl object-contain max-h-[80vh]"
             />
           </div>
         </div>
