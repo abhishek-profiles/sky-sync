@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-const isProd = import.meta.env.MODE === 'production'
-const backendUrl = import.meta.env.VITE_BACKEND_URL || (isProd ? '' : 'http://localhost:5001')
+const isProd = process.env.NODE_ENV === 'production'
+const backendUrl = process.env.VITE_BACKEND_URL || (isProd ? '' : 'http://localhost:5001')
 
 // https://vite.dev/config/
 export default defineConfig({
